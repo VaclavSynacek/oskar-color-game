@@ -31,6 +31,13 @@
         :left (sdl2:load-bmp "left.bmp")
         :right (sdl2:load-bmp "right.bmp")))
 
+(defun close-music ()
+  (sdl2-mixer:halt-music)
+  (sdl2-mixer:close-audio)
+  ;(sdl2-mixer:free-music music)
+  (sdl2-mixer:quit)
+  t)
+
 (defun main()
   (sdl2:with-init (:everything)
     (sdl2-mixer:init :ogg)
@@ -41,7 +48,9 @@
              (image (getf images :default))
              (sound-effect (sdl2-mixer:load-wav  #p"sample.ogg")))
         (sdl2:with-event-loop (:method :poll)
-          (:quit () t)
+          (:quit () (progn
+                      (close-music)
+                      t))
           (:keydown (:keysym keysym)
                     (case (sdl2:scancode keysym)
                       (:scancode-space (sdl2-mixer:play-channel 0 sound-effect 0))
@@ -55,3 +64,10 @@
                  (sdl2:update-window window)
                  (sdl2:delay 100)))))))    ;reduce cpu usage
 
+
+
+(main)
+
+
+
+(describe '#sdl2-mixer:init)
