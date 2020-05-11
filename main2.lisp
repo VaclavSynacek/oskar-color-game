@@ -1,10 +1,10 @@
-#|
+
 
 (ql:quickload :sdl2)
 (ql:quickload :sdl2-mixer)
 (ql:quickload :sdl2)
 
-|#
+
 
 (defpackage #:oskar-color-game
   (:use :common-lisp)
@@ -16,13 +16,14 @@
 (defparameter *screen-height* 480)
 
 (defmacro with-window-surface ((window surface) &body body)
-  `(sdl2:with-window (,window
-                      :title "SDL2 Tutorial"
-                      :w *screen-width*
-                      :h *screen-height*
-                      :flags '(:shown))
-     (let ((,surface (sdl2:get-window-surface ,window)))
-       ,@body)))
+  `(sdl2:with-init (:video)
+     (sdl2:with-window (,window
+                        :title "SDL2 Tutorial"
+                        :w *screen-width*
+                        :h *screen-height*
+                        :flags '(:shown))
+       (let ((,surface (sdl2:get-window-surface ,window)))
+         ,@body))))
 
 (defun load-media ()
   (list :default (sdl2:load-bmp "press.bmp")
@@ -55,3 +56,4 @@
                  (sdl2:update-window window)
                  (sdl2:delay 100)))))))    ;reduce cpu usage
 
+(main)
