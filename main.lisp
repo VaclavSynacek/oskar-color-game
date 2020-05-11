@@ -1,10 +1,8 @@
-#|
 
 (ql:quickload :sdl2)
 (ql:quickload :sdl2-mixer)
 (ql:quickload :sdl2)
 
-|#
 
 (defpackage #:oskar-color-game
   (:use :common-lisp)
