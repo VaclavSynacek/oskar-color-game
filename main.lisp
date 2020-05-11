@@ -25,14 +25,18 @@
        ,@body)))
 
 (defun load-images ()
-  (list :default (sdl2:load-bmp "press.bmp")
+  (list
         :sun (sdl2:load-bmp "sun.bmp")
         :sea (sdl2:load-bmp "sea.bmp")
         :forrest (sdl2:load-bmp "forrest.bmp")
         :apple (sdl2:load-bmp "apple.bmp")))
 
+(defvar *images*)
+
 (defun load-music ()
   (list :good (sdl2-mixer:load-wav  #p"sample.ogg")))
+
+(defvar *musics*)
 
 (defmacro with-mixer-init (() &body body)
   `(progn
@@ -51,25 +55,44 @@
 (defun play-music (m)
   (sdl2-mixer:play-channel 0 m 0))
 
+(defvar *script*)
+
+(setf *script*
+  '((:yellow :sun)
+    (:blue :sea)
+    (:green :forrest)
+    (:red :apple)))
+    
+
+(defun random-from-script ()
+  (elt *script* (random (length *script*))))
+
+(defvar *current*)
+
+(defun eval-guess (color)
+  (when (equal (car *current*) color)
+    (play-music (getf *musics* :good))
+    (setf *current* (random-from-script))))
+
 (defun main()
   (sdl2:with-init (:everything)
     (with-mixer-init ()
       (with-window-surface (window screen-surface)
-        (let* ((images (load-images))
-               (image (getf images :default))
-               (musics (load-music)))
+        (let* ((*images* (load-images))
+               (*current* (random-from-script))
+               (*musics* (load-music)))
           (sdl2:with-event-loop (:method :poll)
             (:quit () t)
             (:keydown (:keysym keysym)
                       (case (sdl2:scancode keysym)
-                        (:scancode-space (play-music (getf musics :good)))
-                        (:scancode-3 (setf image (getf images :sun)))
-                        (:scancode-4 (setf image (getf images :sea)))
-                        (:scancode-5 (setf image (getf images :forrest)))
-                        (:scancode-6 (setf image (getf images :apple)))
-                        (t (setf image (getf images :default)))))
+                        (:scancode-3 (eval-guess :yellow))
+                        (:scancode-4 (eval-guess :blue))
+                        (:scancode-5 (eval-guess :green))
+                        (:scancode-6 (eval-guess :red))
+                        (t t)))
             (:idle ()
-                   (sdl2:blit-surface image nil screen-surface nil)
+                   (sdl2:blit-surface (getf *images* (second *current*)) nil
+                                      screen-surface nil)
                    (sdl2:update-window window)
                    (sdl2:delay 100))))))))    ;reduce cpu usage
 
