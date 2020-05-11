@@ -17,7 +17,7 @@
 
 (defmacro with-window-surface ((window surface) &body body)
   `(sdl2:with-window (,window
-                      :title "SDL2 Tutorial"
+                      :title "Color Game for Oskar"
                       :w *screen-width*
                       :h *screen-height*
                       :flags '(:shown))
@@ -26,10 +26,10 @@
 
 (defun load-images ()
   (list :default (sdl2:load-bmp "press.bmp")
-        :up (sdl2:load-bmp "up.bmp")
-        :down (sdl2:load-bmp "down.bmp")
-        :left (sdl2:load-bmp "left.bmp")
-        :right (sdl2:load-bmp "right.bmp")))
+        :sun (sdl2:load-bmp "sun.bmp")
+        :sea (sdl2:load-bmp "sea.bmp")
+        :forrest (sdl2:load-bmp "forrest.bmp")
+        :apple (sdl2:load-bmp "apple.bmp")))
 
 (defun load-music ()
   (list :good (sdl2-mixer:load-wav  #p"sample.ogg")))
@@ -63,10 +63,10 @@
             (:keydown (:keysym keysym)
                       (case (sdl2:scancode keysym)
                         (:scancode-space (play-music (getf musics :good)))
-                        (:scancode-up (setf image (getf images :up)))
-                        (:scancode-down (setf image (getf images :down)))
-                        (:scancode-left (setf image (getf images :left)))
-                        (:scancode-right (setf image (getf images :right)))
+                        (:scancode-3 (setf image (getf images :sun)))
+                        (:scancode-4 (setf image (getf images :sea)))
+                        (:scancode-5 (setf image (getf images :forrest)))
+                        (:scancode-6 (setf image (getf images :apple)))
                         (t (setf image (getf images :default)))))
             (:idle ()
                    (sdl2:blit-surface image nil screen-surface nil)
@@ -77,4 +77,3 @@
 
 (main)
 
-(sdl2-mixer:)
