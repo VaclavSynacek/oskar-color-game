@@ -83,11 +83,15 @@
             (:quit () t)
             (:keydown (:keysym keysym)
                       (case (sdl2:scancode keysym)
-                        (:scancode-3 (eval-guess :yellow))
-                        (:scancode-4 (eval-guess :blue))
-                        (:scancode-5 (eval-guess :green))
-                        (:scancode-6 (eval-guess :red))
-                        (t t)))
+                        (:scancode-8 (eval-guess :yellow))
+                        (:scancode-kp-8 (eval-guess :yellow))
+                        (:scancode-2 (eval-guess :blue))
+                        (:scancode-kp-2 (eval-guess :blue))
+                        (:scancode-6 (eval-guess :green))
+                        (:scancode-kp-6 (eval-guess :green))
+                        (:scancode-4 (eval-guess :red))
+                        (:scancode-kp-4 (eval-guess :red))
+                        (t (format t "pressed ~a~%" (sdl2:scancode keysym)))))
             (:idle ()
                    (sdl2:blit-surface (getf *images* (second *current*)) nil
                                       screen-surface nil)
@@ -97,4 +101,4 @@
 
 
 (main)
-
+  
