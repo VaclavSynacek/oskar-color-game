@@ -63,7 +63,12 @@
     
 
 (defun random-from-script ()
-  (elt *script* (random (length *script*))))
+  (let
+    ((without-current
+      (remove (second *current*)
+              *script*
+              :key #'second)))
+    (elt without-current (random (length without-current)))))
 
 (defvar *current*)
 
