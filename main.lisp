@@ -62,6 +62,8 @@
     (:red :apple)))
     
 
+(defvar *current* nil)
+
 (defun random-from-script ()
   (let
     ((without-current
@@ -69,8 +71,6 @@
               *script*
               :key #'second)))
     (elt without-current (random (length without-current)))))
-
-(defvar *current*)
 
 (defun eval-guess (color)
   (when (equal (car *current*) color)
