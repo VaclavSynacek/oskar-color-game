@@ -8,8 +8,7 @@ whole thing is about a hundred lines of readable lisp - all on one file
 `main.lisp`.
 
 It sure can be compiled to binary and what not. But the easiest way is to just
-cat it to lisp interpreter/compiler. And of course to have the libraries used
-- you need:
+cat it to lisp interpreter/compiler. And of course to have the libraries used - you need:
 * a lisp (sbcl in example underneath)
 * quicklisp
 * sdl2
@@ -28,4 +27,5 @@ $ sbcl --load quicklisp.lisp
 $ cat main.lisp | sbcl
 ```
 
-and have fun:
+than tape colors over numerical keyboard and have fun:
+![Oskar playing the game of colors](how-to-play.jpg)
